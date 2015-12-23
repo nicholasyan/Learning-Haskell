@@ -10,6 +10,6 @@ type Move = (Peg, Peg)
 -- e.g. hanoi 2 "a" "b" "c" == [("a","c"), ("a","b"), ("c","b")]
 
 hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
-hanoi 0 x y z   = []
-hanoi 1 x y z   = [(x, y)]
+hanoi 0 _ _ _   = []
+hanoi 1 x y _   = [(x, y)]
 hanoi n x y z   = hanoi (n - 1) x z y ++ [(x, y)] ++ hanoi (n - 1) z y x 
