@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 module CreditCardValidator where
 
 -- CIS 194: Homework 1

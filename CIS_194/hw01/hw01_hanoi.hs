@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 module HanoiSolver where
 
 type Peg = String
