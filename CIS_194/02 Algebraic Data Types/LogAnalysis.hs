@@ -62,7 +62,7 @@ inOrder (Node left msg right)  = (inOrder left) ++ [msg] ++ (inOrder right)
 -- extracts all error messages with severity of at least 50
 
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong msgs = foldr insertSevere [] msgs
+whatWentWrong msgs = foldr insertSevere [] (inOrder (build msgs))
 
 insertSevere :: LogMessage -> [String] -> [String]
 insertSevere (LogMessage (Error lvl) _ msg) list
@@ -70,3 +70,22 @@ insertSevere (LogMessage (Error lvl) _ msg) list
     | otherwise = [] ++ list
 -- if we've reached this point, it must not be an error message
 insertSevere _ list = [] ++ list
+
+-- version utilizing filter function
+-- inspired by: https://github.com/BerndSchwarzenbacher/cis194-solutions/blob/master/02-adt/LogAnalysis.hs
+--          and https://github.com/prakashk/cis-194/blob/master/wk02/LogAnalysis.hs 
+
+whatWentWrongFilter :: [LogMessage] -> [String]
+whatWentWrongFilter = extractMsgs . inOrder . build . filter (isSevere 50)
+
+isSevere :: Int -> LogMessage -> Bool
+isSevere cutoff (LogMessage (Error lvl) _ _)
+    | lvl >= cutoff = True
+    | otherwise     = False
+-- if we've reached this point, it must not be an error message
+isSevere _ _        = False 
+
+extractMsgs :: [LogMessage] -> [String]
+extractMsgs msgs = foldr extractMsg [] msgs
+    where extractMsg (LogMessage (Error _) _ msg) list = [msg] ++ list 
+          extractMsg _ list = [] ++ list
